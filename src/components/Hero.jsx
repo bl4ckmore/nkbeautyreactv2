@@ -282,13 +282,13 @@ useEffect(() => {
             ✦
           </motion.div>
 
-          <h1 className="font-bold leading-[1.1] tracking-tight text-charcoal mb-8 text-[clamp(2.5rem,6vw,5.5rem)] relative z-20 mix-blend-darken">
+          <h1 className="font-bold leading-[1.1] tracking-tight text-charcoal mb-8 text-[clamp(2.5rem,6vw,5.5rem)] relative z-20">
             <span className="block mb-1 md:mb-2 md:whitespace-nowrap">
               {lineA}
               {phase === 'lineA' && <span className="animate-blink text-rose-400 font-thin">|</span>}
             </span>
             <span className="block md:whitespace-nowrap relative inline-block">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500 drop-shadow-sm">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500">
                 {lineB}
               </span>
               {phase === 'lineB' && <span className="animate-blink text-rose-400 font-thin">|</span>}
