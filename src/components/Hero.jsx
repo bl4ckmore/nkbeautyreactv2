@@ -14,11 +14,14 @@ export default function Hero({ onBook }) {
   const LA = `${t.hero_line1} ${t.hero_line2}`
   const LB = t.hero_line3
 
-  const [lineA, setLineA] = useState('')
-  const [lineB, setLineB] = useState('')
-  const [phase, setPhase] = useState('lineA')
   const [isMobile, setIsMobile] = useState(false)
   const rafRef = useRef(null)
+  
+  // High-performance typewriter refs (bypasses React state to prevent re-renders)
+  const textRefA = useRef(null)
+  const textRefB = useRef(null)
+  const cursorRefA = useRef(null)
+  const cursorRefB = useRef(null)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -30,32 +33,38 @@ export default function Hero({ onBook }) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
+  // Direct DOM mutation typewriter loop
   useEffect(() => {
-    setLineA('')
-    setLineB('')
-    setPhase('lineA')
-  }, [lang])
-
-useEffect(() => {
     let i = 0;
-    const fullText = `${t.hero_line1} ${t.hero_line2} ${t.hero_line3}`;
-    
-    // Split lines cleanly without measuring layout on every char
-    const timer = setInterval(() => {
-      i++;
-      if (i <= LA.length) {
-        setLineA(LA.slice(0, i));
-      } else if (i <= LA.length + LB.length + 1) {
-        setPhase('lineB');
-        setLineB(LB.slice(0, i - LA.length));
-      } else {
-        setPhase('done');
-        clearInterval(timer);
-      }
-    }, SPEED);
+    if (textRefA.current) textRefA.current.textContent = '';
+    if (textRefB.current) textRefB.current.textContent = '';
+    if (cursorRefA.current) cursorRefA.current.style.display = 'inline';
+    if (cursorRefB.current) cursorRefB.current.style.display = 'none';
 
-    return () => clearInterval(timer);
-  }, [lang]);
+    let lastTime = performance.now();
+    let animId;
+
+    const type = (time) => {
+      if (time - lastTime >= SPEED) {
+        lastTime = time;
+        i++;
+        if (i <= LA.length) {
+          if (textRefA.current) textRefA.current.textContent = LA.slice(0, i);
+        } else if (i <= LA.length + LB.length + 1) {
+          if (cursorRefA.current) cursorRefA.current.style.display = 'none';
+          if (cursorRefB.current) cursorRefB.current.style.display = 'inline';
+          if (textRefB.current) textRefB.current.textContent = LB.slice(0, i - LA.length);
+        } else {
+          cancelAnimationFrame(animId);
+          return;
+        }
+      }
+      animId = requestAnimationFrame(type);
+    };
+
+    animId = requestAnimationFrame(type);
+    return () => cancelAnimationFrame(animId);
+  }, [lang, LA, LB]);
 
   // ANTI-GRAVITY PHYSICS
   const springConfig = { damping: 45, stiffness: 120, mass: 2 }
@@ -284,14 +293,13 @@ useEffect(() => {
 
           <h1 className="font-bold leading-[1.1] tracking-tight text-charcoal mb-8 text-[clamp(2.5rem,6vw,5.5rem)] relative z-20">
             <span className="block mb-1 md:mb-2 md:whitespace-nowrap">
-              {lineA}
-              {phase === 'lineA' && <span className="animate-blink text-rose-400 font-thin">|</span>}
+              <span ref={textRefA}></span>
+              <span ref={cursorRefA} className="animate-blink text-rose-400 font-thin">|</span>
             </span>
             <span className="block md:whitespace-nowrap relative inline-block">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500">
-                {lineB}
+              <span ref={textRefB} className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500">
               </span>
-              {phase === 'lineB' && <span className="animate-blink text-rose-400 font-thin">|</span>}
+              <span ref={cursorRefB} className="animate-blink text-rose-400 font-thin" style={{ display: 'none' }}>|</span>
             </span>
           </h1>
         </motion.div>
