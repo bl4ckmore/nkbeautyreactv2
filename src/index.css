@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── 1. Define the Georgian Font ── */
+@font-face {
+  font-family: 'BPGNino';
+  src: url('/fonts/BPGNinoMtavruliB.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── 2. Force the Georgian font when the language is set to 'ge' ── */
+html[lang="ge"], 
+html[lang="ge"] * {
+  font-family: 'BPGNino', sans-serif !important;
+}
+html[lang="ge"] .keep-en {
+  font-family: 'Inter', 'Google Sans', sans-serif !important;
+  font-weight: 600 !important; /* Keeps it bold like your logo */
+  font-style: normal !important;
+  letter-spacing: normal !important; /* Prevents Georgian spacing from applying */
+  text-transform: none !important;    /* Prevents potential case changes */
+}
 * {
   margin: 0;
   padding: 0;

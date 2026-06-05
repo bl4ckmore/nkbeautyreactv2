@@ -1,19 +1,24 @@
 import { motion } from 'framer-motion'
+import { useLang } from '../context/LanguageContext'
+import { T } from '../i18n/translations'
 
-const headline = ['Ready to feel', 'your most', 'beautiful?']
 const vp = { once: false, margin: '-80px' }
 
 export default function BookCTA() {
+  const { lang } = useLang()
+  const t = T[lang]
+
+  // Using the updated split headline from dictionary
+  const headline = [t.cta_h2a, t.cta_h2b]
+
   return (
     <section id="book" className="relative py-36 overflow-hidden">
-      {/* Background image */}
       <img
         src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1800&q=80"
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
         aria-hidden="true"
       />
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-charcoal/80" />
 
       {/* Floating orbs */}
@@ -36,10 +41,10 @@ export default function BookCTA() {
           transition={{ duration: 0.5 }}
           className="inline-block text-xs font-semibold tracking-widest text-rose-400 uppercase mb-8"
         >
-          Book now
+          {t.cta_eyebrow}
         </motion.span>
 
-        {/* Word-by-word headline */}
+        {/* Word-by-word headline adapted for new language string */}
         <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8">
           {headline.map((line, li) => (
             <span key={li} className="block overflow-hidden">
@@ -54,7 +59,7 @@ export default function BookCTA() {
                     delay: 0.1 + li * 0.15 + wi * 0.08,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="inline-block mr-4"
+                  className="inline-block mr-3"
                 >
                   {word}
                 </motion.span>
@@ -63,18 +68,16 @@ export default function BookCTA() {
           ))}
         </h2>
 
-        {/* Blur reveal subtitle */}
-        <motion.p
-          initial={{ opacity: 0, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-          viewport={vp}
-          transition={{ duration: 0.8, delay: 0.55, ease: 'easeOut' }}
-          className="text-gray-300 text-lg mb-12 max-w-md mx-auto leading-relaxed"
-        >
-          Our team is ready to create your next favorite look. Book in under a minute.
-        </motion.p>
+<motion.p
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  viewport={vp}
+  transition={{ delay: 0.85 }}
+  className="mt-6 text-gray-500 text-xs"
+>
+  {lang === 'ge' ? 'უფასო გაუქმება 24 საათით ადრე · ბარათი არ არის საჭირო' : 'Free cancellation up to 24h before · No card required'}
+</motion.p>
 
-        {/* CTA with pulse ring */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -94,19 +97,9 @@ export default function BookCTA() {
             className="relative inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold text-base px-10 py-5 rounded-full shadow-xl shadow-rose-500/30 transition-all"
           >
             <span>✦</span>
-            Book an Appointment
+            {t.cta_btn}
           </motion.a>
         </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={vp}
-          transition={{ delay: 0.85 }}
-          className="mt-6 text-gray-500 text-xs"
-        >
-          Free cancellation up to 24h before · No card required
-        </motion.p>
       </div>
     </section>
   )

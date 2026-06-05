@@ -1,36 +1,10 @@
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Check } from 'lucide-react'
-
-const plans = [
-  {
-    name: 'Essential',
-    price: '$65',
-    desc: 'A fresh look and quick, confident maintenance.',
-    features: ['Haircut & Blowout', 'Express Facial', 'Classic Manicure', 'Brow Shape'],
-    cta: 'Book Essential',
-    featured: false,
-  },
-  {
-    name: 'Signature',
-    price: '$145',
-    desc: 'Our most loved all-in-one beauty experience.',
-    features: ['Full Color & Treatment', 'Luxury Facial', 'Gel Mani + Pedi', 'Lash Lift', 'Priority Booking'],
-    cta: 'Book Signature',
-    featured: true,
-  },
-  {
-    name: 'Luxury',
-    price: '$280',
-    desc: 'The ultimate VIP experience for special occasions.',
-    features: ['Bridal Hair & Makeup', 'Full Body Spa', 'Nail Art Suite', 'Champagne Welcome', 'Private Room'],
-    cta: 'Book Luxury',
-    featured: false,
-  },
-]
+import { useLang } from '../context/LanguageContext'
 
 const vp = { once: false, margin: '-60px' }
 
-function PricingCard({ plan, index }) {
+function PricingCard({ plan, index, onBook, lang }) {
   const rotateX = useMotionValue(0)
   const rotateY = useMotionValue(0)
   const springX = useSpring(rotateX, { damping: 22, stiffness: 220 })
@@ -71,7 +45,7 @@ function PricingCard({ plan, index }) {
           transition={{ delay: index * 0.1 + 0.25 }}
           className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-400 to-rose-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow"
         >
-          Most Popular
+          {lang === 'ge' ? 'ყველაზე მოთხოვნადი' : 'Most Popular'}
         </motion.div>
       )}
 
@@ -83,7 +57,7 @@ function PricingCard({ plan, index }) {
           <span className={`text-5xl font-bold ${plan.featured ? 'text-white' : 'text-charcoal'}`}>
             {plan.price}
           </span>
-          <span className="text-sm mb-2 text-gray-400">/session</span>
+          <span className="text-sm mb-2 text-gray-400">{lang === 'ge' ? '/ვიზიტი' : '/session'}</span>
         </div>
         <p className={`text-sm leading-relaxed ${plan.featured ? 'text-gray-400' : 'text-gray-500'}`}>
           {plan.desc}
@@ -110,8 +84,8 @@ function PricingCard({ plan, index }) {
         ))}
       </ul>
 
-      <motion.a
-        href="#booking"
+      <motion.button
+        onClick={() => onBook()}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         className={`text-center text-sm font-semibold py-3.5 rounded-2xl transition-all ${
@@ -121,12 +95,47 @@ function PricingCard({ plan, index }) {
         }`}
       >
         {plan.cta}
-      </motion.a>
+      </motion.button>
     </motion.div>
   )
 }
 
-export default function Pricing() {
+export default function Pricing({ onBook }) {
+  const { lang } = useLang()
+
+  const plans = [
+    {
+      name: lang === 'ge' ? 'ბაზისური' : 'Essential',
+      price: '65 ₾',
+      desc: lang === 'ge' ? 'ახალი იმიჯი და სწრაფი, თავდაჯერებული მოვლა.' : 'A fresh look and quick, confident maintenance.',
+      features: lang === 'ge' 
+        ? ['თმის შეჭრა და დავარცხნა', 'სახის ექსპრეს მოვლა', 'კლასიკური მანიკიური', 'წარბის კორექცია'] 
+        : ['Haircut & Blowout', 'Express Facial', 'Classic Manicure', 'Brow Shape'],
+      cta: lang === 'ge' ? 'დაჯავშნა' : 'Book Essential',
+      featured: false,
+    },
+    {
+      name: lang === 'ge' ? 'სიგნატური' : 'Signature',
+      price: '145 ₾',
+      desc: lang === 'ge' ? 'ჩვენი ყველაზე მოთხოვნადი ყოვლისმომცველი სილამაზის გამოცდილება.' : 'Our most loved all-in-one beauty experience.',
+      features: lang === 'ge' 
+        ? ['სრული შეღებვა და მკურნალობა', 'ლუქს სახის მოვლა', 'გელ მანიკიური+პედიკიური', 'წამწამების ლიფტინგი', 'პრიორიტეტული ჯავშანი'] 
+        : ['Full Color & Treatment', 'Luxury Facial', 'Gel Mani + Pedi', 'Lash Lift', 'Priority Booking'],
+      cta: lang === 'ge' ? 'დაჯავშნა' : 'Book Signature',
+      featured: true,
+    },
+    {
+      name: lang === 'ge' ? 'ლუქსი' : 'Luxury',
+      price: '280 ₾',
+      desc: lang === 'ge' ? 'უმაღლესი VIP გამოცდილება განსაკუთრებული შემთხვევებისთვის.' : 'The ultimate VIP experience for special occasions.',
+      features: lang === 'ge' 
+        ? ['სადღესასწაულო თმა და მაკიაჟი', 'სხეულის სპა', 'ნეილ არტის სუიტი', 'შამპანური', 'პრივატული ოთახი'] 
+        : ['Bridal Hair & Makeup', 'Full Body Spa', 'Nail Art Suite', 'Champagne Welcome', 'Private Room'],
+      cta: lang === 'ge' ? 'დაჯავშნა' : 'Book Luxury',
+      featured: false,
+    },
+  ]
+
   return (
     <section id="pricing" className="py-24 bg-gray-50/60 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
@@ -138,7 +147,7 @@ export default function Pricing() {
           className="mb-4"
         >
           <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">
-            Pricing
+            {lang === 'ge' ? 'ფასები' : 'Pricing'}
           </span>
         </motion.div>
 
@@ -150,10 +159,10 @@ export default function Pricing() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-charcoal leading-tight"
           >
-            Simple,
+            {lang === 'ge' ? 'მარტივი,' : 'Simple,'}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-500">
-              honest pricing
+              {lang === 'ge' ? 'გამჭვირვალე ფასები' : 'honest pricing'}
             </span>
           </motion.h2>
           <motion.p
@@ -163,13 +172,15 @@ export default function Pricing() {
             transition={{ delay: 0.25 }}
             className="text-gray-500 max-w-xs text-sm leading-relaxed md:text-right"
           >
-            No hidden fees. Choose the package that fits your moment.
+            {lang === 'ge' 
+              ? 'ფარული გადასახადების გარეშე. აირჩიეთ თქვენთვის სასურველი პაკეტი.' 
+              : 'No hidden fees. Choose the package that fits your moment.'}
           </motion.p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 items-center">
           {plans.map((plan, i) => (
-            <PricingCard key={plan.name} plan={plan} index={i} />
+            <PricingCard key={plan.name} plan={plan} index={i} onBook={onBook} lang={lang} />
           ))}
         </div>
       </div>

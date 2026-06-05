@@ -1,25 +1,32 @@
 import { motion } from 'framer-motion'
+import { useLang } from '../context/LanguageContext'
+import { T } from '../i18n/translations'
+import nkLogo from '../assets/images/nk.png'
 
-const links = {
-  Services: ['Hair & Color', 'Skin & Facials', 'Nails & Spa', 'Bridal'],
-  Company: ['Our Story', 'Our Team', 'Gallery', 'Careers'],
-  Connect: ['Instagram', 'Facebook', 'TikTok', 'Contact'],
-}
-
-const hours = [
-  { days: 'Mon – Fri', time: '9am – 7pm' },
-  { days: 'Saturday', time: '9am – 6pm' },
-  { days: 'Sunday', time: '10am – 5pm' },
-]
-
-const headline = ['Ready to feel', 'your most', 'beautiful?']
-const wordmark = 'Lumière'.split('')
 const vp = { once: false, margin: '-40px' }
 
-export default function Footer() {
+export default function Footer({ onBook }) {
+  const { lang } = useLang()
+  const t = T[lang] || T['en']
+
+  const links = {
+    [t.ft_services || 'Services']: t.ft_svc_links || [],
+    [lang === 'ge' ? 'კომპანია' : 'Company']: lang === 'ge' 
+      ? ['ჩვენი ისტორია', 'ჩვენი გუნდი', 'გალერეა', 'კარიერა'] 
+      : ['Our Story', 'Our Team', 'Gallery', 'Careers'],
+    [lang === 'ge' ? 'კავშირი' : 'Connect']: ['Instagram', 'Facebook', 'TikTok', lang === 'ge' ? 'კონტაქტი' : 'Contact'],
+  }
+
+  const hours = [
+    { days: lang === 'ge' ? 'ორშ – პარ' : 'Mon – Fri', time: '9am – 7pm' },
+    { days: lang === 'ge' ? 'შაბათი' : 'Saturday', time: '9am – 6pm' },
+    { days: lang === 'ge' ? 'კვირა' : 'Sunday', time: '10am – 5pm' },
+  ]
+
+  const headline = [t.cta_h2a, t.cta_h2b]
+
   return (
     <footer className="relative bg-charcoal text-white overflow-hidden">
-      {/* Background image spanning the entire footer */}
       <img
         src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1800&q=80"
         alt=""
@@ -28,7 +35,6 @@ export default function Footer() {
       />
       <div className="absolute inset-0 bg-charcoal/85" />
 
-      {/* Floating orbs */}
       <motion.div
         animate={{ y: [0, -28, 0], x: [0, 12, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -40,7 +46,6 @@ export default function Footer() {
         className="absolute bottom-16 right-20 w-80 h-80 bg-rose-500/15 rounded-full blur-3xl pointer-events-none"
       />
 
-      {/* ── CTA hero area ── */}
       <div id="book" className="relative pt-28 pb-16">
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.span
@@ -50,7 +55,7 @@ export default function Footer() {
             transition={{ duration: 0.5 }}
             className="inline-block text-xs font-semibold tracking-widest text-rose-400 uppercase mb-4"
           >
-            Book now
+            {t.cta_eyebrow}
           </motion.span>
 
           <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-4">
@@ -75,7 +80,7 @@ export default function Footer() {
             transition={{ duration: 0.8, delay: 0.55, ease: 'easeOut' }}
             className="text-gray-300 text-lg mb-8 max-w-md mx-auto leading-relaxed"
           >
-            Our team is ready to create your next favorite look. Book in under a minute.
+            {t.cta_sub}
           </motion.p>
 
           <motion.div
@@ -90,53 +95,49 @@ export default function Footer() {
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut' }}
               className="absolute inset-0 rounded-full bg-rose-400/30 pointer-events-none"
             />
-            <motion.a
-              href="#"
+            <motion.button
+              onClick={() => onBook()}
               whileHover={{ scale: 1.06, backgroundColor: '#f43f5e' }}
               whileTap={{ scale: 0.96 }}
               className="relative inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold text-base px-10 py-5 rounded-full shadow-xl shadow-rose-500/30 transition-all"
             >
               <span>✦</span>
-              Book an Appointment
-            </motion.a>
+              {t.ft_book}
+            </motion.button>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={vp}
-            transition={{ delay: 0.85 }}
-            className="mt-6 text-gray-500 text-xs"
-          >
-            Free cancellation up to 24h before · No card required
-          </motion.p>
         </div>
       </div>
 
-      {/* ── Big wordmark ── */}
-      <div className="relative z-10 border-b border-white/10 px-6 pt-8 pb-6 max-w-6xl mx-auto">
-        <h2
-          aria-label="Lumière"
-          className="text-[clamp(4rem,12vw,9rem)] font-bold tracking-tight leading-none text-white/10 select-none"
+      <div className="relative z-10 border-b border-white/10 px-6 pt-16 pb-12 max-w-6xl mx-auto flex items-center gap-4 opacity-10 select-none overflow-hidden">
+        <motion.img
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={vp}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          src={nkLogo}
+          alt="NK"
+          className="h-[clamp(3.5rem,10vw,8rem)] w-auto object-contain brightness-0 invert"
+        />
+        <p
+          aria-hidden="true"
+          className="text-[clamp(4rem,12vw,9rem)] font-bold tracking-tight leading-none text-white -ml-2 md:-ml-4 !font-sans"
         >
-          {wordmark.map((char, i) => (
+          {'BEAUTY'.split('').map((char, i) => (
             <motion.span
               key={i}
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={vp}
-              transition={{ duration: 0.55, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.55, delay: 0.2 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
               className="inline-block"
             >
               {char}
             </motion.span>
           ))}
-        </h2>
+        </p>
       </div>
 
-      {/* ── Links grid — 5 columns ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {/* Brand */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -145,17 +146,21 @@ export default function Footer() {
           className="col-span-2 md:col-span-1"
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-300 to-rose-400 flex items-center justify-center text-white font-bold text-xs">
-              L
+            <div className="bg-white p-1 rounded-full flex items-center justify-center">
+              <img 
+                src={nkLogo} 
+                alt="NK Logo" 
+                className="w-6 h-6 object-contain mix-blend-multiply"
+              />
             </div>
-            <span className="font-semibold text-base">Lumière</span>
+            {/* Kept !font-sans for consistency */}
+            <span className="font-semibold text-base !font-sans">Beauty</span>
           </div>
           <p className="text-gray-500 text-xs leading-relaxed">
-            Premium beauty services crafted for every version of you.
+            {t.ft_desc}
           </p>
         </motion.div>
 
-        {/* Services, Company, Connect */}
         {Object.entries(links).map(([category, items], ci) => (
           <motion.div
             key={category}
@@ -185,14 +190,15 @@ export default function Footer() {
           </motion.div>
         ))}
 
-        {/* Hours + Address + Phone */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={vp}
           transition={{ duration: 0.45, delay: 0.36 }}
         >
-          <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase mb-4">Hours</p>
+          <p className="text-xs font-semibold tracking-widest text-gray-500 uppercase mb-4">
+            {lang === 'ge' ? 'საათები' : 'Hours'}
+          </p>
           <ul className="space-y-2 mb-6">
             {hours.map(({ days, time }) => (
               <li key={days} className="flex justify-between gap-3 text-xs">
@@ -203,14 +209,13 @@ export default function Footer() {
           </ul>
           <div className="pt-5 border-t border-white/10 space-y-2">
             <p className="text-xs text-gray-500 leading-relaxed">
-              123 Bloom Avenue<br />New York, NY 10001
+              123 Bloom Avenue<br />{lang === 'ge' ? 'თბილისი, საქართველო' : 'Tbilisi, Georgia'}
             </p>
-            <p className="text-xs text-gray-500">(212) 555-0192</p>
+            <p className="text-xs text-gray-500">+995 32 123 456</p>
           </div>
         </motion.div>
       </div>
 
-      {/* ── Bottom bar ── */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -219,12 +224,11 @@ export default function Footer() {
         className="relative z-10 border-t border-white/10 px-6 py-6 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3"
       >
         <p className="text-gray-600 text-xs">
-          © {new Date().getFullYear()} Lumière Beauty Salon. All rights reserved.
+          © {new Date().getFullYear()} NK Beauty. {lang === 'ge' ? 'ყველა უფლება დაცულია.' : 'All rights reserved.'}
         </p>
         <div className="flex gap-5 text-xs text-gray-600">
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms</a>
-          <a href="#" className="hover:text-white transition-colors">Accessibility</a>
+          <a href="#" className="hover:text-white transition-colors">{t.ft_privacy}</a>
+          <a href="#" className="hover:text-white transition-colors">{t.ft_terms}</a>
         </div>
       </motion.div>
     </footer>

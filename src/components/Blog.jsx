@@ -1,35 +1,9 @@
 import { motion } from 'framer-motion'
-
-const posts = [
-  {
-    category: 'Hair',
-    date: 'May 2026',
-    title: '5 Secrets to a Perfect Balayage',
-    excerpt:
-      "The art of balayage goes beyond technique — it is about understanding light, shadow, and the unique texture of each client's hair.",
-    image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    category: 'Skin',
-    date: 'April 2026',
-    title: 'Morning Routine for Glowing Skin',
-    excerpt:
-      "A consistent morning routine is your skin's best friend. We break down the 5 steps our estheticians swear by every single day.",
-    image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    category: 'Bridal',
-    date: 'March 2026',
-    title: 'Your Bridal Makeup Timeline',
-    excerpt:
-      "From the trial run to the wedding morning — here's how we work with brides to create flawless, long-lasting looks that photograph beautifully.",
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
-  },
-]
+import { useLang } from '../context/LanguageContext'
 
 const vp = { once: false, margin: '-60px' }
 
-function BlogCard({ post, index }) {
+function BlogCard({ post, index, lang }) {
   return (
     <motion.article
       initial={{ opacity: 0, clipPath: 'inset(40px 0 0 0 round 24px)' }}
@@ -62,7 +36,7 @@ function BlogCard({ post, index }) {
           whileHover={{ x: 4 }}
           className="inline-flex items-center gap-1 mt-5 text-xs font-semibold text-charcoal"
         >
-          Read more →
+          {lang === 'ge' ? 'სრულად წაკითხვა →' : 'Read more →'}
         </motion.a>
       </div>
     </motion.article>
@@ -70,6 +44,38 @@ function BlogCard({ post, index }) {
 }
 
 export default function Blog() {
+  const { lang } = useLang()
+
+  const posts = [
+    {
+      category: lang === 'ge' ? 'თმა' : 'Hair',
+      date: lang === 'ge' ? 'მაისი 2026' : 'May 2026',
+      title: lang === 'ge' ? '5 საიდუმლო იდეალური ბალაიაჟისთვის' : '5 Secrets to a Perfect Balayage',
+      excerpt: lang === 'ge' 
+        ? 'ბალაიაჟის ხელოვნება სცდება ტექნიკას — ეს არის სინათლის, ჩრდილების და თითოეული კლიენტის თმის უნიკალური ტექსტურის გააზრება.' 
+        : "The art of balayage goes beyond technique — it is about understanding light, shadow, and the unique texture of each client's hair.",
+      image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      category: lang === 'ge' ? 'კანი' : 'Skin',
+      date: lang === 'ge' ? 'აპრილი 2026' : 'April 2026',
+      title: lang === 'ge' ? 'დილის რუტინა მანათობელი კანისთვის' : 'Morning Routine for Glowing Skin',
+      excerpt: lang === 'ge' 
+        ? 'თანმიმდევრული დილის რუტინა თქვენი კანის საუკეთესო მეგობარია. ჩვენ განვიხილავთ იმ 5 ნაბიჯს, რომელსაც ჩვენი ესთეტიკოსები ყოველდღიურად იყენებენ.' 
+        : "A consistent morning routine is your skin's best friend. We break down the 5 steps our estheticians swear by every single day.",
+      image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      category: lang === 'ge' ? 'პატარძლები' : 'Bridal',
+      date: lang === 'ge' ? 'მარტი 2026' : 'March 2026',
+      title: lang === 'ge' ? 'სადღესასწაულო მაკიაჟის განრიგი' : 'Your Bridal Makeup Timeline',
+      excerpt: lang === 'ge' 
+        ? 'საცდელი მაკიაჟიდან ქორწილის დილამდე — აი, როგორ ვმუშაობთ პატარძლებთან, რათა შევქმნათ უნაკლო იმიჯი.' 
+        : "From the trial run to the wedding morning — here's how we work with brides to create flawless, long-lasting looks that photograph beautifully.",
+      image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
+    },
+  ]
+
   return (
     <section id="blog" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
@@ -81,7 +87,7 @@ export default function Blog() {
           className="mb-4"
         >
           <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">
-            Blog
+            {lang === 'ge' ? 'ბლოგი' : 'Blog'}
           </span>
         </motion.div>
 
@@ -93,10 +99,10 @@ export default function Blog() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-charcoal leading-tight"
           >
-            Beauty tips
+            {lang === 'ge' ? 'სილამაზის რჩევები' : 'Beauty tips'}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-500">
-              & stories
+              {lang === 'ge' ? 'და ისტორიები' : '& stories'}
             </span>
           </motion.h2>
           <motion.a
@@ -108,13 +114,13 @@ export default function Blog() {
             whileHover={{ x: 4 }}
             className="text-sm font-medium text-gray-500 hover:text-charcoal transition-colors flex items-center gap-1"
           >
-            View all posts →
+            {lang === 'ge' ? 'ყველა პოსტის ნახვა →' : 'View all posts →'}
           </motion.a>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {posts.map((post, i) => (
-            <BlogCard key={post.title} post={post} index={i} />
+            <BlogCard key={post.title} post={post} index={i} lang={lang} />
           ))}
         </div>
       </div>

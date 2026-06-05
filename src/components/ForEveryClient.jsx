@@ -1,41 +1,46 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-
-const clients = [
-  {
-    id: 0,
-    type: 'Bride & Wedding',
-    headline: 'Your perfect day, perfectly styled.',
-    description:
-      'Our bridal team specializes in creating unforgettable looks for your wedding day — from trial runs to the final touch-up.',
-    href: '#clients',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80',
-  },
-  {
-    id: 1,
-    type: 'Everyday Glam',
-    headline: 'Look stunning, every single day.',
-    description:
-      "Whether it's a blowout before work or a fresh mani on the weekend — we make everyday feel like a special occasion.",
-    href: '#clients',
-    image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=700&q=80',
-  },
-  {
-    id: 2,
-    type: 'Corporate & Events',
-    headline: 'Look powerful, feel confident.',
-    description:
-      'Professional styling for photoshoots, corporate events, galas, and everything in between. Arrive camera-ready.',
-    href: '#clients',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=700&q=80',
-  },
-]
+import { useLang } from '../context/LanguageContext'
 
 const vp = { once: false, margin: '-80px' }
 
 export default function ForEveryClient() {
+  const { lang } = useLang()
   const [active, setActive] = useState(0)
+
+  const clients = [
+    {
+      id: 0,
+      type: lang === 'ge' ? 'პატარძალი და ქორწილი' : 'Bride & Wedding',
+      headline: lang === 'ge' ? 'შენი იდეალური დღე, იდეალური სტილით.' : 'Your perfect day, perfectly styled.',
+      description: lang === 'ge' 
+        ? 'ჩვენი სადღესასწაულო გუნდი სპეციალიზებულია დაუვიწყარი იმიჯის შექმნაში თქვენი ქორწილის დღისთვის — საცდელი მაკიაჟიდან საბოლოო შტრიხებამდე.' 
+        : 'Our bridal team specializes in creating unforgettable looks for your wedding day — from trial runs to the final touch-up.',
+      href: '#clients',
+      image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80',
+    },
+    {
+      id: 1,
+      type: lang === 'ge' ? 'ყოველდღიური გლამური' : 'Everyday Glam',
+      headline: lang === 'ge' ? 'გამოიყურებოდე შესანიშნავად, ყოველდღე.' : 'Look stunning, every single day.',
+      description: lang === 'ge' 
+        ? 'იქნება ეს უბრალო დავარცხნა სამსახურის წინ თუ ახალი მანიკიური შაბათ-კვირას — ჩვენ ყოველდღიურობას განსაკუთრებულს ვხდით.' 
+        : "Whether it's a blowout before work or a fresh mani on the weekend — we make everyday feel like a special occasion.",
+      href: '#clients',
+      image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=700&q=80',
+    },
+    {
+      id: 2,
+      type: lang === 'ge' ? 'კორპორატიული და ღონისძიებები' : 'Corporate & Events',
+      headline: lang === 'ge' ? 'იყავი ძლიერი და თავდაჯერებული.' : 'Look powerful, feel confident.',
+      description: lang === 'ge' 
+        ? 'პროფესიონალური სტილი ფოტოსესიებისთვის, კორპორატიული ღონისძიებებისთვის და გალა საღამოებისთვის.' 
+        : 'Professional styling for photoshoots, corporate events, galas, and everything in between. Arrive camera-ready.',
+      href: '#clients',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=700&q=80',
+    },
+  ]
 
   const prev = () => setActive((a) => (a === 0 ? clients.length - 1 : a - 1))
   const next = () => setActive((a) => (a === clients.length - 1 ? 0 : a + 1))
@@ -51,7 +56,7 @@ export default function ForEveryClient() {
           className="mb-4"
         >
           <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">
-            Built for every client
+            {lang === 'ge' ? 'შექმნილია ყველა კლიენტისთვის' : 'Built for every client'}
           </span>
         </motion.div>
 
@@ -62,10 +67,10 @@ export default function ForEveryClient() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl md:text-5xl font-bold text-charcoal mb-2 leading-tight"
         >
-          Beauty for
+          {lang === 'ge' ? 'სილამაზე' : 'Beauty for'}
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-500">
-            every occasion
+            {lang === 'ge' ? 'ყველა შემთხვევისთვის' : 'every occasion'}
           </span>
         </motion.h2>
 
@@ -76,7 +81,9 @@ export default function ForEveryClient() {
           transition={{ delay: 0.25 }}
           className="text-gray-500 text-lg mb-12 max-w-lg"
         >
-          Whether you're walking down the aisle or stepping into the boardroom — we have the perfect service for you.
+          {lang === 'ge' 
+            ? 'იქნება ეს ქორწილი თუ საქმიანი შეხვედრა — ჩვენ გვაქვს იდეალური სერვისი თქვენთვის.' 
+            : "Whether you're walking down the aisle or stepping into the boardroom — we have the perfect service for you."}
         </motion.p>
 
         <motion.div
@@ -153,7 +160,7 @@ export default function ForEveryClient() {
                   whileHover={{ x: 4 }}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-charcoal"
                 >
-                  View case →
+                  {lang === 'ge' ? 'დეტალების ნახვა →' : 'View case →'}
                 </motion.a>
               </motion.div>
             </AnimatePresence>
@@ -163,6 +170,7 @@ export default function ForEveryClient() {
                 onClick={prev}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Previous client type"
                 className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-all"
               >
                 <ChevronLeft size={16} />
@@ -171,6 +179,7 @@ export default function ForEveryClient() {
                 onClick={next}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Next client type"
                 className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-gray-400 hover:bg-gray-50 transition-all"
               >
                 <ChevronRight size={16} />
