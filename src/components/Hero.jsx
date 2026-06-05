@@ -14,7 +14,7 @@ export default function Hero({ onBook }) {
   const LA = `${t.hero_line1} ${t.hero_line2}`
   const LB = t.hero_line3
 
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false)
   const rafRef = useRef(null)
   
   // High-performance typewriter refs (bypasses React state to prevent re-renders)
@@ -117,29 +117,33 @@ export default function Hero({ onBook }) {
     >
       {/* ── MORPHING AMBIENT BACKGROUND GLOW ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <motion.div
-          animate={isMobile ? undefined : { 
-            y: [0, -60, 0], 
-            x: [0, 40, 0], 
-            scale: [1, 1.3, 1], 
-            borderRadius: ['50%', '60% 40% 30% 70%', '40% 60% 70% 30%', '50%'] 
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[5%] left-[5%] w-[20rem] md:w-[30rem] h-[20rem] md:h-[30rem] bg-pink-200/40 blur-3xl md:blur-[100px] gpu-layer"
-        />
-        <motion.div
-          animate={isMobile ? undefined : { 
-            y: [0, 50, 0], 
-            x: [0, -60, 0], 
-            scale: [1, 1.4, 1],
-            borderRadius: ['50%', '40% 60% 70% 30%', '60% 40% 30% 70%', '50%']
-          }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute bottom-[5%] right-[5%] w-[25rem] md:w-[35rem] h-[25rem] md:h-[35rem] bg-rose-300/30 blur-3xl md:blur-[120px] gpu-layer"
-        />
+        {!isMobile && (
+          <>
+            <motion.div
+              animate={{ 
+                y: [0, -60, 0], 
+                x: [0, 40, 0], 
+                scale: [1, 1.3, 1], 
+                borderRadius: ['50%', '60% 40% 30% 70%', '40% 60% 70% 30%', '50%'] 
+              }}
+              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute top-[5%] left-[5%] w-[30rem] h-[30rem] bg-pink-200/40 blur-[100px] gpu-layer"
+            />
+            <motion.div
+              animate={{ 
+                y: [0, 50, 0], 
+                x: [0, -60, 0], 
+                scale: [1, 1.4, 1],
+                borderRadius: ['50%', '40% 60% 70% 30%', '60% 40% 30% 70%', '50%']
+              }}
+              transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+              className="absolute bottom-[5%] right-[5%] w-[35rem] h-[35rem] bg-rose-300/30 blur-[120px] gpu-layer"
+            />
+          </>
+        )}
       </div>
 
-      <ParticleCanvas />
+      {!isMobile && <ParticleCanvas />}
 
       {/* ── ANTI-GRAVITY SHAPES & ABSTRACT GLASS UI ── */}
       <div className="absolute inset-0 pointer-events-none z-10" style={isMobile ? {} : { transformStyle: 'preserve-3d' }}>
