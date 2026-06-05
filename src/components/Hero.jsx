@@ -41,13 +41,16 @@ export default function Hero({ onBook }) {
     if (cursorRefA.current) cursorRefA.current.style.display = 'inline';
     if (cursorRefB.current) cursorRefB.current.style.display = 'none';
 
-    let lastTime = performance.now();
+    const startTime = performance.now();
     let animId;
 
     const type = (time) => {
-      if (time - lastTime >= SPEED) {
-        lastTime = time;
-        i++;
+      const elapsed = performance.now() - startTime;
+      const targetI = Math.floor(elapsed / SPEED);
+      
+      if (targetI > i) {
+        i = targetI;
+        
         if (i <= LA.length) {
           if (textRefA.current) textRefA.current.textContent = LA.slice(0, i);
         } else if (i <= LA.length + LB.length + 1) {
@@ -110,9 +113,9 @@ export default function Hero({ onBook }) {
   return (
     <section
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-16"
-      style={{ perspective: 1200 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      style={isMobile ? {} : { perspective: 1200 }}
+      onMouseMove={isMobile ? undefined : handleMouseMove}
+      onMouseLeave={isMobile ? undefined : handleMouseLeave}
     >
       {/* ── MORPHING AMBIENT BACKGROUND GLOW ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -141,7 +144,7 @@ export default function Hero({ onBook }) {
       <ParticleCanvas />
 
       {/* ── ANTI-GRAVITY SHAPES & ABSTRACT GLASS UI ── */}
-      <div className="absolute inset-0 pointer-events-none z-10" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="absolute inset-0 pointer-events-none z-10" style={isMobile ? {} : { transformStyle: 'preserve-3d' }}>
         
         {/* Abstract Fluid Aura Card (Right Side) */}
         <motion.div 
