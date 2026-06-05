@@ -38,24 +38,22 @@ export default function Hero({ onBook }) {
     let i = 0;
     if (textRefA.current) textRefA.current.textContent = '';
     if (textRefB.current) textRefB.current.textContent = '';
-    if (cursorRefA.current) cursorRefA.current.style.display = 'inline';
-    if (cursorRefB.current) cursorRefB.current.style.display = 'none';
+    if (cursorRefA.current) cursorRefA.current.style.opacity = '1';
+    if (cursorRefB.current) cursorRefB.current.style.opacity = '0';
 
-    const startTime = performance.now();
+    let lastTime = performance.now();
     let animId;
 
     const type = (time) => {
-      const elapsed = performance.now() - startTime;
-      const targetI = Math.floor(elapsed / SPEED);
-      
-      if (targetI > i) {
-        i = targetI;
+      if (time - lastTime >= SPEED) {
+        lastTime = time;
+        i++;
         
         if (i <= LA.length) {
           if (textRefA.current) textRefA.current.textContent = LA.slice(0, i);
         } else if (i <= LA.length + LB.length + 1) {
-          if (cursorRefA.current) cursorRefA.current.style.display = 'none';
-          if (cursorRefB.current) cursorRefB.current.style.display = 'inline';
+          if (cursorRefA.current) cursorRefA.current.style.opacity = '0';
+          if (cursorRefB.current) cursorRefB.current.style.opacity = '1';
           if (textRefB.current) textRefB.current.textContent = LB.slice(0, i - LA.length);
         } else {
           cancelAnimationFrame(animId);
@@ -300,9 +298,9 @@ export default function Hero({ onBook }) {
               <span ref={cursorRefA} className="animate-blink text-rose-400 font-thin">|</span>
             </span>
             <span className="block md:whitespace-nowrap relative inline-block">
-              <span ref={textRefB} className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500">
+              <span ref={textRefB} className="text-pink-500 drop-shadow-sm">
               </span>
-              <span ref={cursorRefB} className="animate-blink text-rose-400 font-thin" style={{ display: 'none' }}>|</span>
+              <span ref={cursorRefB} className="animate-blink text-rose-400 font-thin" style={{ opacity: 0 }}>|</span>
             </span>
           </h1>
         </motion.div>
