@@ -11,52 +11,36 @@
   font-display: swap;
 }
 
-/* ── 2. Force the Georgian font when the language is set to 'ge' ── */
+/* ── 2. Optimized Font Handling ── */
 html[lang="ge"], 
 html[lang="ge"] * {
   font-family: 'BPGNino', sans-serif !important;
 }
-html[lang="ge"] .keep-en {
-  font-family: 'Inter', 'Google Sans', sans-serif !important;
-  font-weight: 600 !important; /* Keeps it bold like your logo */
+
+/* Forces English font on brand elements and disables Georgian overrides */
+.keep-en {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
   font-style: normal !important;
-  letter-spacing: normal !important; /* Prevents Georgian spacing from applying */
-  text-transform: none !important;    /* Prevents potential case changes */
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  letter-spacing: normal !important;
+  text-transform: none !important;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ── 3. Performance Optimization ── */
+.gpu-layer {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #ffffff;
-  color: #1a1a1a;
-  overflow-x: hidden;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: #ffffff; color: #1a1a1a; overflow-x: hidden; }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #fff;
-}
-::-webkit-scrollbar-thumb {
-  background: #e8a0a0;
-  border-radius: 3px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #fff; }
+::-webkit-scrollbar-thumb { background: #e8a0a0; border-radius: 3px; }
 
-/* Cursor blink */
-.cursor-blink::after {
-  content: '|';
-  animation: blink 1s step-end infinite;
-  color: #e8a0a0;
-  font-weight: 300;
-  margin-left: 2px;
-}
+@keyframes blink { 50% { opacity: 0; } }
+.animate-blink { animation: blink 1s step-end infinite; }

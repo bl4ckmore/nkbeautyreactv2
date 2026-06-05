@@ -9,7 +9,12 @@ export default function ParticleCanvas({ dark = false }) {
     const ctx = canvas.getContext('2d')
     let animId
 
-    // Cache rect — only update on resize, not every mousemove
+    // 1. Detect if mobile (using standard 768px breakpoint)
+    const isMobile = window.innerWidth < 768
+    
+    // 2. Reduce particle count drastically for mobile to prevent freezing
+    const particleCount = isMobile ? 15 : 60
+
     let canvasRect = { left: 0, top: 0 }
 
     const resize = () => {
@@ -21,13 +26,14 @@ export default function ParticleCanvas({ dark = false }) {
     window.addEventListener('resize', resize)
 
     const onMouseMove = (e) => {
+      // 3. Optional: Disable mouse tracking on mobile to save more CPU
+      if (isMobile) return 
       mouseRef.current = { x: e.clientX - canvasRect.left, y: e.clientY - canvasRect.top }
     }
     window.addEventListener('mousemove', onMouseMove)
 
-    // 60 particles (was 120) — still looks rich, runs twice as cheap
     const particles = []
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < particleCount; i++) {
       const hue = dark ? 210 + Math.random() * 40 : 330 + Math.random() * 30
       particles.push({
         x: Math.random() * canvas.width,
@@ -36,17 +42,15 @@ export default function ParticleCanvas({ dark = false }) {
         speedX: (Math.random() - 0.5) * 0.4,
         speedY: (Math.random() - 0.5) * 0.4,
         opacity: Math.random() * 0.6 + 0.2,
-        // Pre-compute color string — avoids template-literal allocation every frame
         color: dark ? `hsl(${hue},70%,75%)` : `hsl(${hue},60%,65%)`,
       })
     }
 
-    const REPEL_RADIUS = 80
+    const REPEL_RADIUS = isMobile ? 40 : 80 // Smaller radius for mobile
     const REPEL_R2 = REPEL_RADIUS * REPEL_RADIUS
     const REPEL_STRENGTH = 0.5
 
     const draw = () => {
-      // Reset transform once, then clear — no per-particle save/restore
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -55,15 +59,16 @@ export default function ParticleCanvas({ dark = false }) {
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
 
-        // Squared-distance check avoids sqrt until we know it's needed
-        const dx = p.x - mx
-        const dy = p.y - my
-        const d2 = dx * dx + dy * dy
-        if (d2 < REPEL_R2 && d2 > 0) {
-          const dist = Math.sqrt(d2)
-          const force = ((REPEL_RADIUS - dist) / REPEL_RADIUS) * REPEL_STRENGTH
-          p.x += (dx / dist) * force
-          p.y += (dy / dist) * force
+        if (!isMobile) { // Only calculate physics if not on mobile
+          const dx = p.x - mx
+          const dy = p.y - my
+          const d2 = dx * dx + dy * dy
+          if (d2 < REPEL_R2 && d2 > 0) {
+            const dist = Math.sqrt(d2)
+            const force = ((REPEL_RADIUS - dist) / REPEL_RADIUS) * REPEL_STRENGTH
+            p.x += (dx / dist) * force
+            p.y += (dy / dist) * force
+          }
         }
 
         p.x += p.speedX
@@ -71,7 +76,6 @@ export default function ParticleCanvas({ dark = false }) {
         if (p.x < 0 || p.x > canvas.width) p.speedX *= -1
         if (p.y < 0 || p.y > canvas.height) p.speedY *= -1
 
-        // setTransform(cos, sin, -sin, cos, tx, ty) — replaces save/translate/rotate/restore
         const angle = Math.atan2(p.speedY, p.speedX)
         const cos = Math.cos(angle)
         const sin = Math.sin(angle)
