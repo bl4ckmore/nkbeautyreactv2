@@ -17,7 +17,15 @@ export default function Hero({ onBook }) {
   const [lineA, setLineA] = useState('')
   const [lineB, setLineB] = useState('')
   const [phase, setPhase] = useState('lineA')
+  const [isMobile, setIsMobile] = useState(false)
   const rafRef = useRef(null)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -100,24 +108,24 @@ useEffect(() => {
       {/* ── MORPHING AMBIENT BACKGROUND GLOW ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <motion.div
-          animate={{ 
+          animate={isMobile ? undefined : { 
             y: [0, -60, 0], 
             x: [0, 40, 0], 
             scale: [1, 1.3, 1], 
             borderRadius: ['50%', '60% 40% 30% 70%', '40% 60% 70% 30%', '50%'] 
           }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[5%] left-[5%] w-[30rem] h-[30rem] bg-pink-200/40 blur-[100px]"
+          className="absolute top-[5%] left-[5%] w-[20rem] md:w-[30rem] h-[20rem] md:h-[30rem] bg-pink-200/40 blur-3xl md:blur-[100px] gpu-layer"
         />
         <motion.div
-          animate={{ 
+          animate={isMobile ? undefined : { 
             y: [0, 50, 0], 
             x: [0, -60, 0], 
             scale: [1, 1.4, 1],
             borderRadius: ['50%', '40% 60% 70% 30%', '60% 40% 30% 70%', '50%']
           }}
           transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute bottom-[5%] right-[5%] w-[35rem] h-[35rem] bg-rose-300/30 blur-[120px]"
+          className="absolute bottom-[5%] right-[5%] w-[25rem] md:w-[35rem] h-[25rem] md:h-[35rem] bg-rose-300/30 blur-3xl md:blur-[120px] gpu-layer"
         />
       </div>
 
@@ -132,9 +140,9 @@ useEffect(() => {
           className="absolute top-[15%] -right-10 md:right-[8%] lg:right-[12%] w-40 h-56 md:w-56 md:h-80 p-2 bg-white/10 backdrop-blur-xl border border-white/40 shadow-2xl shadow-pink-200/20 rounded-t-full rounded-b-3xl overflow-hidden flex items-center justify-center"
         >
           <motion.div
-            animate={{ rotate: 360 }}
+            animate={isMobile ? undefined : { rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg_at_50%_50%,#fbcfe8_0deg,#fda4af_120deg,#f472b6_240deg,#fbcfe8_360deg)] opacity-40 blur-2xl"
+            className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg_at_50%_50%,#fbcfe8_0deg,#fda4af_120deg,#f472b6_240deg,#fbcfe8_360deg)] opacity-40 blur-2xl gpu-layer"
           />
           <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-t-full rounded-b-[1.25rem] border border-white/60" />
           
@@ -189,9 +197,9 @@ useEffect(() => {
         {/* Giant Floating Ring */}
         <motion.div style={{ x: fgX, y: fgY }} className="absolute -bottom-20 -left-10 opacity-30 blur-[2px]">
           <motion.div 
-            animate={{ rotate: 360, scale: [1, 1.05, 1] }}
+            animate={isMobile ? undefined : { rotate: 360, scale: [1, 1.05, 1] }}
             transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            className="w-96 h-96 border-[4px] border-pink-300/50 rounded-full"
+            className="w-96 h-96 border-[4px] border-pink-300/50 rounded-full gpu-layer"
           />
         </motion.div>
 
@@ -232,9 +240,9 @@ useEffect(() => {
 
       {/* ── MAIN CONTENT ── */}
       <motion.div 
-        animate={{ y: [-8, 8, -8] }} 
+        animate={isMobile ? undefined : { y: [-8, 8, -8] }} 
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        className="relative z-20 text-center px-6 max-w-5xl mx-auto w-full pointer-events-auto"
+        className="relative z-20 text-center px-6 max-w-5xl mx-auto w-full pointer-events-auto gpu-layer"
       >
         <motion.div style={{ x: h1X, y: h1Y }} className="inline-block relative">
           <motion.div
