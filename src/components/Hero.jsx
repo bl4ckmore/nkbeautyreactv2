@@ -28,17 +28,26 @@ export default function Hero({ onBook }) {
     setPhase('lineA')
   }, [lang])
 
-  useEffect(() => {
-    let timer
-    if (phase === 'lineA') {
-      if (lineA.length < LA.length) timer = setTimeout(() => setLineA(LA.slice(0, lineA.length + 1)), SPEED)
-      else timer = setTimeout(() => setPhase('lineB'), 280)
-    } else if (phase === 'lineB') {
-      if (lineB.length < LB.length) timer = setTimeout(() => setLineB(LB.slice(0, lineB.length + 1)), SPEED)
-      else setPhase('done')
-    }
-    return () => clearTimeout(timer)
-  }, [lineA, lineB, phase, LA, LB])
+useEffect(() => {
+    let i = 0;
+    const fullText = `${t.hero_line1} ${t.hero_line2} ${t.hero_line3}`;
+    
+    // Split lines cleanly without measuring layout on every char
+    const timer = setInterval(() => {
+      i++;
+      if (i <= LA.length) {
+        setLineA(LA.slice(0, i));
+      } else if (i <= LA.length + LB.length + 1) {
+        setPhase('lineB');
+        setLineB(LB.slice(0, i - LA.length));
+      } else {
+        setPhase('done');
+        clearInterval(timer);
+      }
+    }, SPEED);
+
+    return () => clearInterval(timer);
+  }, [lang]);
 
   // ANTI-GRAVITY PHYSICS
   const springConfig = { damping: 45, stiffness: 120, mass: 2 }
