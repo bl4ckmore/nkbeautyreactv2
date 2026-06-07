@@ -156,7 +156,7 @@ export default function BookingModal({ preService = null, onClose }) {
                         placeholder={t.bm_name_ph}
                         value={form.name}
                         onChange={ch}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.name ? 'border-red-300' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 rounded-xl border text-base md:text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.name ? 'border-red-300' : 'border-gray-200'}`}
                       />
                       {errs.name && <p className="text-xs text-red-400 mt-1">{errs.name}</p>}
                     </div>
@@ -170,7 +170,7 @@ export default function BookingModal({ preService = null, onClose }) {
                         placeholder={t.bm_phone_ph}
                         value={form.phone}
                         onChange={ch}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.phone ? 'border-red-300' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 rounded-xl border text-base md:text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.phone ? 'border-red-300' : 'border-gray-200'}`}
                       />
                       {errs.phone && <p className="text-xs text-red-400 mt-1">{errs.phone}</p>}
                     </div>
@@ -184,7 +184,7 @@ export default function BookingModal({ preService = null, onClose }) {
                       name="service"
                       value={form.service}
                       onChange={ch}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all bg-white ${errs.service ? 'border-red-300' : 'border-gray-200'}`}
+                      className={`w-full px-4 py-3 rounded-xl border text-base md:text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all bg-white ${errs.service ? 'border-red-300' : 'border-gray-200'}`}
                     >
                       <option value="">{t.bm_svc_ph}</option>
                       {services.map(s => (
@@ -207,7 +207,7 @@ export default function BookingModal({ preService = null, onClose }) {
                         value={form.date}
                         onChange={ch}
                         min={new Date().toISOString().split('T')[0]}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.date ? 'border-red-300' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 rounded-xl border text-base md:text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all ${errs.date ? 'border-red-300' : 'border-gray-200'}`}
                       />
                       {errs.date && <p className="text-xs text-red-400 mt-1">{errs.date}</p>}
                     </div>
@@ -219,7 +219,7 @@ export default function BookingModal({ preService = null, onClose }) {
                         name="time"
                         value={form.time}
                         onChange={ch}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all bg-white ${errs.time ? 'border-red-300' : 'border-gray-200'}`}
+                        className={`w-full px-4 py-3 rounded-xl border text-base md:text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all bg-white ${errs.time ? 'border-red-300' : 'border-gray-200'}`}
                       >
                         <option value="">{t.bm_time_ph}</option>
                         {TIMES.map(tm => <option key={tm} value={tm}>{tm}</option>)}
@@ -239,7 +239,7 @@ export default function BookingModal({ preService = null, onClose }) {
                       value={form.notes}
                       onChange={ch}
                       style={{ resize: 'vertical' }}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-base md:text-sm text-charcoal placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-300 transition-all"
                     />
                   </div>
 

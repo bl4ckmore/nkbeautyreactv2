@@ -38,8 +38,14 @@ export default function Hero({ onBook }) {
     let i = 0;
     if (textRefA.current) textRefA.current.textContent = '';
     if (textRefB.current) textRefB.current.textContent = '';
-    if (cursorRefA.current) cursorRefA.current.style.opacity = '1';
-    if (cursorRefB.current) cursorRefB.current.style.opacity = '0';
+    if (cursorRefA.current) {
+      cursorRefA.current.style.display = 'inline';
+      cursorRefA.current.style.visibility = 'visible';
+    }
+    if (cursorRefB.current) {
+      cursorRefB.current.style.display = 'none';
+      cursorRefB.current.style.visibility = 'hidden';
+    }
 
     let lastTime = performance.now();
     let animId;
@@ -52,10 +58,20 @@ export default function Hero({ onBook }) {
         if (i <= LA.length) {
           if (textRefA.current) textRefA.current.textContent = LA.slice(0, i);
         } else if (i <= LA.length + LB.length + 1) {
-          if (cursorRefA.current) cursorRefA.current.style.opacity = '0';
-          if (cursorRefB.current) cursorRefB.current.style.opacity = '1';
+          if (cursorRefA.current) {
+            cursorRefA.current.style.display = 'none';
+            cursorRefA.current.style.visibility = 'hidden';
+          }
+          if (cursorRefB.current) {
+            cursorRefB.current.style.display = 'inline';
+            cursorRefB.current.style.visibility = 'visible';
+          }
           if (textRefB.current) textRefB.current.textContent = LB.slice(0, i - LA.length);
         } else {
+          if (cursorRefB.current) {
+            cursorRefB.current.style.display = 'none';
+            cursorRefB.current.style.visibility = 'hidden';
+          }
           cancelAnimationFrame(animId);
           return;
         }
@@ -299,12 +315,12 @@ export default function Hero({ onBook }) {
           <h1 className="font-bold leading-[1.1] tracking-tight text-charcoal mb-8 text-[clamp(2.5rem,6vw,5.5rem)] relative z-20">
             <span className="block mb-1 md:mb-2 md:whitespace-nowrap">
               <span ref={textRefA}></span>
-              <span ref={cursorRefA} className="animate-blink text-rose-400 font-thin">|</span>
+              <span ref={cursorRefA} className="animate-blink text-rose-400 font-thin" style={{ display: 'none' }}>|</span>
             </span>
             <span className="block md:whitespace-nowrap relative inline-block">
               <span ref={textRefB} className="text-pink-500 drop-shadow-sm">
               </span>
-              <span ref={cursorRefB} className="animate-blink text-rose-400 font-thin" style={{ opacity: 0 }}>|</span>
+              <span ref={cursorRefB} className="animate-blink text-rose-400 font-thin" style={{ display: 'none' }}>|</span>
             </span>
           </h1>
         </motion.div>
