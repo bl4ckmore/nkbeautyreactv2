@@ -9,7 +9,7 @@ export function LanguageProvider({ children }) {
     if (path.startsWith('/ka')) return 'ge'; // Map /ka URL to 'ge' internal state
     if (path.startsWith('/en')) return 'en';
     
-    return localStorage.getItem('site_lang') || 'en';
+    return localStorage.getItem('site_lang') || 'ge';
   });
 
   const setLang = (newLang) => {

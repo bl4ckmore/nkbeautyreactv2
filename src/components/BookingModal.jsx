@@ -189,7 +189,7 @@ export default function BookingModal({ preService = null, onClose }) {
                       <option value="">{t.bm_svc_ph}</option>
                       {services.map(s => (
                         <option key={s.id} value={s.name}>
-                          {s.name} — {s.price} ₾
+                          {(lang === 'ge' && s.nameGe) ? s.nameGe : s.name} — {s.price} ₾
                         </option>
                       ))}
                     </select>
